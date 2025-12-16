@@ -12,9 +12,10 @@
     "format": "prettier --write \"src/**/*.{js,ts,vue,json,css,scss,md}\""
   },
   "dependencies": {
-    "@guolao/vue-monaco-editor": "^1.6.0",
-    "monaco-editor": "^0.55.1",
-    "vue": "^3.5.24"
+    "@codemirror/lang-javascript": "^6.2.4",
+    "codemirror": "^6.0.2",
+    "vue": "^3.5.24",
+    "vue-codemirror": "^6.1.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.2.0",
