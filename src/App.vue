@@ -65,7 +65,7 @@ const stopSketch = () => {
     <ToolBar :is-running="isRunning" @run="runSketch" @stop="stopSketch" />
     <div class="main-content">
       <div class="editor-section">
-        <JsEditor :code="code" />
+        <JsEditor :code="code" @update:code="code = $event" />
       </div>
       <div class="preview-section">
         <JsPreview ref="jsPreviewInstance" :key="iframeKey" />

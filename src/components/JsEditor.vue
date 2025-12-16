@@ -9,6 +9,10 @@ interface Props {
 
 defineProps<Props>()
 
+const emit = defineEmits<{
+  'update:code': [value: string]
+}>()
+
 const editor = shallowRef<Monaco.editor.IStandaloneCodeEditor | null>(null)
 const handleMount = (editorInstance: Monaco.editor.IStandaloneCodeEditor) => {
   editor.value = editorInstance
@@ -28,6 +32,7 @@ const handleMount = (editorInstance: Monaco.editor.IStandaloneCodeEditor) => {
         links: false,
         minimap: { enabled: false },
       }"
+      @update:value="emit('update:code', $event)"
       @mount="handleMount"
     />
   </div>
@@ -35,8 +40,7 @@ const handleMount = (editorInstance: Monaco.editor.IStandaloneCodeEditor) => {
 
 <style scoped>
 .js-editor-wrapper {
-  width: 100%;
-  height: 100%;
+  flex: 1 1 0;
   overflow: hidden;
 }
 </style>
