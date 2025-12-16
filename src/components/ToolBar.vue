@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+
 interface Props {
   isRunning: boolean
 }
@@ -9,7 +11,26 @@ const emit = defineEmits<{
   run: []
   stop: []
   download: []
+  upload: [file: File]
 }>()
+
+const fileInput = ref<HTMLInputElement | null>(null)
+
+const handleFileChange = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  const file = target.files?.[0]
+  if (file && file.name.endsWith('.js')) {
+    emit('upload', file)
+  }
+  // Reset input value to allow re-uploading the same file
+  if (target) {
+    target.value = ''
+  }
+}
+
+const triggerUpload = () => {
+  fileInput.value?.click()
+}
 </script>
 
 <template>
@@ -17,7 +38,15 @@ const emit = defineEmits<{
     <button class="run-button" :disabled="isRunning" @click="emit('run')">Run</button>
     <button class="stop-button" :disabled="!isRunning" @click="emit('stop')">Stop</button>
     <div class="divider"></div>
+    <button class="upload-button" @click="triggerUpload">Upload</button>
     <button class="download-button" @click="emit('download')">Download</button>
+    <input
+      ref="fileInput"
+      type="file"
+      accept=".js"
+      style="display: none"
+      @change="handleFileChange"
+    />
   </div>
 </template>
 
@@ -74,6 +103,21 @@ const emit = defineEmits<{
   background-color: #666;
   margin: 0 12px;
   align-self: stretch;
+}
+
+.upload-button {
+  padding: 6px 16px;
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 8px;
+}
+
+.upload-button:hover {
+  background-color: #e68900;
 }
 
 .download-button {

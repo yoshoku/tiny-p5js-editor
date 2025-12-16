@@ -74,6 +74,20 @@ const downloadSketch = () => {
   URL.revokeObjectURL(url)
 }
 
+const uploadSketch = (file: File) => {
+  const reader = new FileReader()
+  reader.onload = e => {
+    const content = e.target?.result
+    if (typeof content === 'string') {
+      code.value = content
+      if (isRunning.value) {
+        stopSketch()
+      }
+    }
+  }
+  reader.readAsText(file)
+}
+
 const startResize = (e: MouseEvent) => {
   isDragging.value = true
   e.preventDefault()
@@ -115,6 +129,7 @@ onUnmounted(() => {
       :is-running="isRunning"
       @run="runSketch"
       @stop="stopSketch"
+      @upload="uploadSketch"
       @download="downloadSketch"
     />
     <div ref="contentArea" class="main-content" :class="{ dragging: isDragging }">
