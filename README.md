@@ -2,6 +2,8 @@
 
 Tiny p5.js Online Editor is a simple online editor for programming education using p5.js.
 
+![Tiny p5.js Online Editor](https://github.com/user-attachments/assets/566027e3-5b9f-4818-8207-6c347fc218e8)
+
 ## Development
 
 Install dependencies:
