@@ -4,15 +4,16 @@ import JsEditor from './components/JsEditor.vue'
 import JsPreview from './components/JsPreview.vue'
 import ToolBar from './components/ToolBar.vue'
 
-const code = ref(`function setup() {
+let initialCode = `function setup() {
   createCanvas(400, 400);
 }
 
 function draw() {
   background(220);
   ellipse(mouseX, mouseY, 50, 50);
-}`)
+}`
 
+const code = ref(initialCode)
 const contentArea = ref<HTMLElement | null>(null)
 const editorWidth = ref(50) // Percentage width of the editor
 const iframeKey = ref(crypto.randomUUID()) // To force iframe reloads
@@ -96,12 +97,20 @@ const uploadSketch = (file: File) => {
     const content = e.target?.result
     if (typeof content === 'string') {
       code.value = content
+      initialCode = content
       if (isRunning.value) {
         stopSketch()
       }
     }
   }
   reader.readAsText(file)
+}
+
+const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+  if (code.value !== initialCode) {
+    e.preventDefault()
+    e.returnValue = ''
+  }
 }
 
 const startResize = (e: MouseEvent) => {
@@ -130,12 +139,14 @@ onMounted(() => {
   window.addEventListener('mousemove', handleResize)
   window.addEventListener('mouseup', stopResize)
   window.addEventListener('mouseleave', stopResize)
+  window.addEventListener('beforeunload', handleBeforeUnload)
 })
 
 onUnmounted(() => {
   window.removeEventListener('mousemove', handleResize)
   window.removeEventListener('mouseup', stopResize)
   window.removeEventListener('mouseleave', stopResize)
+  window.removeEventListener('beforeunload', handleBeforeUnload)
 })
 </script>
 
