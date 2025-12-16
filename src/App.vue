@@ -27,7 +27,9 @@ const extractPluginUrls = (code: string): string[] => {
   let match
 
   while ((match = pluginRegex.exec(code)) !== null) {
-    urls.push(match[1])
+    if (match[1]) {
+      urls.push(match[1])
+    }
   }
 
   return urls
