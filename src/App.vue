@@ -4,6 +4,10 @@ import JsEditor from './components/JsEditor.vue'
 import JsPreview from './components/JsPreview.vue'
 import ToolBar from './components/ToolBar.vue'
 
+const generateId = () => {
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+}
+
 let initialCode = `function setup() {
   createCanvas(400, 400);
 }
@@ -16,7 +20,7 @@ function draw() {
 const code = ref(initialCode)
 const contentArea = ref<HTMLElement | null>(null)
 const editorWidth = ref(50) // Percentage width of the editor
-const iframeKey = ref(crypto.randomUUID()) // To force iframe reloads
+const iframeKey = ref(generateId()) // To force iframe reloads
 const isDragging = ref(false)
 const isRunning = ref(false)
 const jsPreviewInstance = ref<InstanceType<typeof JsPreview> | null>(null)
@@ -77,7 +81,7 @@ const runSketch = () => {
 }
 
 const stopSketch = () => {
-  iframeKey.value = crypto.randomUUID()
+  iframeKey.value = generateId()
   isRunning.value = false
 }
 
