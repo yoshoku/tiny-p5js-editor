@@ -15,11 +15,47 @@ function draw() {
 
 const isRunning = ref(false)
 const jsPreviewInstance = ref<InstanceType<typeof JsPreview> | null>(null)
+const iframeKey = ref(crypto.randomUUID()) // To force iframe reloads
 
 const runSketch = () => {
+  const iframe = jsPreviewInstance.value?.$refs.iframe as HTMLIFrameElement
+  if (!iframe) return
+
+  const contentDocument = iframe.contentDocument || iframe.contentWindow?.document
+  if (!contentDocument) return
+
+  /* eslint-disable no-useless-escape */
+  const html = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <style>
+        * { margin: 0; padding: 0; }
+        html, body { width: 100%; height: 100%; overflow: hidden; }
+        body { display: flex; justify-content: center; align-items: center; }
+        canvas { display: block; }
+      </style>
+      <script src="https://cdn.jsdelivr.net/npm/p5@1.11.11/lib/p5.min.js"><\/script>
+    </head>
+    <body>
+      <script>${code.value}<\/script>
+    </body>
+    </html>
+  `
+  /* eslint-enable no-useless-escape */
+
+  contentDocument.open()
+  contentDocument.write(html)
+  contentDocument.close()
+
   isRunning.value = true
 }
+
 const stopSketch = () => {
+  iframeKey.value = crypto.randomUUID()
   isRunning.value = false
 }
 </script>
@@ -32,7 +68,7 @@ const stopSketch = () => {
         <JsEditor :code="code" />
       </div>
       <div class="preview-section">
-        <JsPreview ref="jsPreviewInstance" />
+        <JsPreview ref="jsPreviewInstance" :key="iframeKey" />
       </div>
     </div>
   </div>
