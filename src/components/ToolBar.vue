@@ -137,7 +137,9 @@ const triggerUpload = () => {
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
   margin-right: 8px;
   background-color: #fff;
   color: #333;
@@ -185,7 +187,7 @@ const triggerUpload = () => {
 .divider {
   width: 1px;
   background-color: #666;
-  margin: 0 8px;
+  margin: 0 8px 0 0;
   align-self: stretch;
 }
 </style>
