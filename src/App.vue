@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import JsEditor from './components/JsEditor.vue'
+import JsPreview from './components/JsPreview.vue'
 import ToolBar from './components/ToolBar.vue'
 
 const code = ref(`function setup() {
@@ -13,6 +14,7 @@ function draw() {
 }`)
 
 const isRunning = ref(false)
+const jsPreviewInstance = ref<InstanceType<typeof JsPreview> | null>(null)
 
 const runSketch = () => {
   isRunning.value = true
@@ -25,8 +27,13 @@ const stopSketch = () => {
 <template>
   <div class="container">
     <ToolBar :is-running="isRunning" @run="runSketch" @stop="stopSketch" />
-    <div class="editor-section">
-      <JsEditor :code="code" />
+    <div class="main-content">
+      <div class="editor-section">
+        <JsEditor :code="code" />
+      </div>
+      <div class="preview-section">
+        <JsPreview ref="jsPreviewInstance" />
+      </div>
     </div>
   </div>
 </template>
@@ -51,7 +58,21 @@ body,
   height: 100%;
 }
 
+.main-content {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  min-height: 0;
+}
+
 .editor-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.preview-section {
   flex: 1;
   display: flex;
   flex-direction: column;

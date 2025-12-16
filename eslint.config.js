@@ -22,6 +22,9 @@ export default [
         ecmaVersion: 'latest',
         sourceType: 'module',
       },
+      globals: {
+        ...globals.browser,
+      },
     },
     rules: {
       'vue/multi-word-component-names': 'warn',
