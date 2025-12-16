@@ -16,7 +16,7 @@ const handleMount = (editorInstance: Monaco.editor.IStandaloneCodeEditor) => {
 </script>
 
 <template>
-  <div class="editor-wrapper">
+  <div class="js-editor-wrapper">
     <vue-monaco-editor
       :value="code"
       language="javascript"
@@ -34,7 +34,7 @@ const handleMount = (editorInstance: Monaco.editor.IStandaloneCodeEditor) => {
 </template>
 
 <style scoped>
-.editor-wrapper {
+.js-editor-wrapper {
   width: 100%;
   height: 100%;
   overflow: hidden;
