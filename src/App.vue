@@ -3,10 +3,7 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import JsEditor from './components/JsEditor.vue'
 import JsPreview from './components/JsPreview.vue'
 import ToolBar from './components/ToolBar.vue'
-
-const generateId = () => {
-  return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
-}
+import { extractBackgroundColor, extractPluginUrls, generateId } from './utils/sketch'
 
 let initialCode = `function setup() {
   createCanvas(400, 400);
@@ -24,26 +21,6 @@ const iframeKey = ref(generateId()) // To force iframe reloads
 const isDragging = ref(false)
 const isRunning = ref(false)
 const jsPreviewInstance = ref<InstanceType<typeof JsPreview> | null>(null)
-
-const extractBackgroundColor = (code: string): string | null => {
-  const bgRegex = /\/\/\s*@background\s+([#a-zA-Z0-9() ,]+)/i
-  const match = code.match(bgRegex)
-  return match ? match[1] : null
-}
-
-const extractPluginUrls = (code: string): string[] => {
-  const pluginRegex = /\/\/\s*@plugin\s+(https?:\/\/[^\s]+)/g
-  const urls: string[] = []
-  let match
-
-  while ((match = pluginRegex.exec(code)) !== null) {
-    if (match[1]) {
-      urls.push(match[1])
-    }
-  }
-
-  return urls
-}
 
 const runSketch = () => {
   const iframe = jsPreviewInstance.value?.iframe as HTMLIFrameElement
