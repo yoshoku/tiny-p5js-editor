@@ -1,7 +1,7 @@
 export const extractBackgroundColor = (code: string): string | null => {
   const bgRegex = /\/\/\s*@background\s+([#a-zA-Z0-9() ,]+)/
   const match = code.match(bgRegex)
-  return match ? match[1] : null
+  return match ? (match[1] ?? null) : null
 }
 
 export const extractPluginUrls = (code: string): string[] => {
