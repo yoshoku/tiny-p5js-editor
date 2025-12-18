@@ -60,11 +60,11 @@ describe('App Integration (Browser)', () => {
       const iframe = preview.vm.iframe as HTMLIFrameElement
 
       expect(iframe).toBeDefined()
-      expect(iframe.contentDocument).toBeDefined()
+      expect(iframe.srcdoc).toBeDefined()
 
-      const scripts = iframe.contentDocument?.querySelectorAll('script')
-      const hasP5Script = Array.from(scripts || []).some(script => script.src.includes('p5'))
-      expect(hasP5Script).toBe(true)
+      const srcdoc = iframe.srcdoc
+      expect(srcdoc).toContain('p5')
+      expect(srcdoc).toContain('<script src="https://cdn.jsdelivr.net/npm/p5')
     })
 
     it('should stop sketch and reset iframe when stop button is clicked', async () => {
@@ -98,7 +98,7 @@ describe('App Integration (Browser)', () => {
   describe('Plugin URLs Extraction', () => {
     it('should extract and include plugin URLs in iframe', async () => {
       const codeWithPlugin = `
-        // @plugin https://cdn.example.com/test-plugin.js
+        // @plugin https://cdn.jsdelivr.net/npm/p5.sound@0.2.0/dist/p5.sound.min.js
         function setup() {
           createCanvas(400, 400);
         }
@@ -115,18 +115,10 @@ describe('App Integration (Browser)', () => {
       const preview = wrapper.findComponent({ name: 'JsPreview' })
       const iframe = preview.vm.iframe as HTMLIFrameElement
 
-      // Wait for iframe content to be fully loaded
-      await new Promise(resolve => setTimeout(resolve, 200))
+      expect(iframe.srcdoc).toBeDefined()
 
-      const iframeDoc = iframe.contentDocument
-      expect(iframeDoc).toBeDefined()
-
-      const scripts = iframeDoc?.querySelectorAll('script')
-      const hasPluginScript = Array.from(scripts || []).some(script =>
-        script.src.includes('test-plugin.js')
-      )
-
-      expect(hasPluginScript).toBe(true)
+      const srcdoc = iframe.srcdoc
+      expect(srcdoc).toContain('<script src="https://cdn.jsdelivr.net/npm/p5.sound@0.2.0/dist/p5.sound.min.js"></script>')
     })
   })
 
