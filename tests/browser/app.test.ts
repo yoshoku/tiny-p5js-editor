@@ -115,12 +115,18 @@ describe('App Integration (Browser)', () => {
       const preview = wrapper.findComponent({ name: 'JsPreview' })
       const iframe = preview.vm.iframe as HTMLIFrameElement
 
-      await new Promise(resolve => setTimeout(resolve, 100))
+      // Wait for iframe content to be fully loaded
+      await new Promise(resolve => setTimeout(resolve, 200))
 
       const iframeDoc = iframe.contentDocument
-      const htmlContent = iframeDoc?.documentElement.innerHTML || ''
+      expect(iframeDoc).toBeDefined()
 
-      expect(htmlContent).toContain('test-plugin.js')
+      const scripts = iframeDoc?.querySelectorAll('script')
+      const hasPluginScript = Array.from(scripts || []).some(script =>
+        script.src.includes('test-plugin.js')
+      )
+
+      expect(hasPluginScript).toBe(true)
     })
   })
 
