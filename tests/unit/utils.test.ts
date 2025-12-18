@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import { extractBackgroundColor, extractPluginUrls, generateId } from '../../src/utils/sketch'
+import {
+  extractBackgroundColor,
+  extractPluginUrls,
+  escapeHtml,
+  generateId,
+} from '../../src/utils/sketch'
 
 describe('extractBackgroundColor', () => {
   it('should extract background color from comment', () => {
@@ -86,5 +91,27 @@ describe('generateId', () => {
   it('should generate ID in expected format', () => {
     const id = generateId()
     expect(id).toMatch(/^\d+-[a-z0-9]+$/)
+  })
+})
+
+describe('escapeHtml', () => {
+  it('should escape special characters', () => {
+    expect(escapeHtml('<script>alert("XSS")</script>')).toBe(
+      '&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;'
+    )
+  })
+
+  it('should escape URL with injection attempt', () => {
+    expect(escapeHtml('https://example.com"><script>alert("XSS")</script><a href="')).toBe(
+      'https://example.com&quot;&gt;&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;&lt;a href=&quot;'
+    )
+  })
+
+  it('should return unchanged string when no special characters exist', () => {
+    expect(escapeHtml('Hello World')).toBe('Hello World')
+  })
+
+  it('should handle empty string', () => {
+    expect(escapeHtml('')).toBe('')
   })
 })

@@ -3,7 +3,12 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import JsEditor from './components/JsEditor.vue'
 import JsPreview from './components/JsPreview.vue'
 import ToolBar from './components/ToolBar.vue'
-import { extractBackgroundColor, extractPluginUrls, generateId } from './utils/sketch'
+import {
+  extractBackgroundColor,
+  extractPluginUrls,
+  escapeHtml,
+  generateId,
+} from './utils/sketch'
 
 let initialCode = `function setup() {
   createCanvas(400, 400);
@@ -28,7 +33,9 @@ const runSketch = () => {
 
   /* eslint-disable no-useless-escape */
   const pluginUrls = extractPluginUrls(code.value)
-  const pluginScripts = pluginUrls.map(url => `<script src="${url}"><\/script>`).join('\n')
+  const pluginScripts = pluginUrls
+    .map(url => `<script src="${escapeHtml(url)}"><\/script>`)
+    .join('\n')
 
   const html = `
     <!DOCTYPE html>

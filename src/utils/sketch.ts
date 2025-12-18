@@ -18,6 +18,19 @@ export const extractPluginUrls = (code: string): string[] => {
   return urls
 }
 
+export const escapeHtml = (str: string): string => {
+  return str.replace(/[&<>"']/g, match => {
+    const escape: Record<string, string> = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;',
+    }
+    return escape[match] || match
+  })
+}
+
 export const generateId = (): string => {
   return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
 }
