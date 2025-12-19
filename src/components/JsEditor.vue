@@ -25,6 +25,7 @@ const handleMount = (editorInstance: Monaco.editor.IStandaloneCodeEditor) => {
       :value="code"
       language="javascript"
       theme="vs-light"
+      options="{ scrollbar: { vertical: 'auto', horizontal: 'auto' } }"
       @update:value="emit('update:code', $event)"
       @mount="handleMount"
     />
