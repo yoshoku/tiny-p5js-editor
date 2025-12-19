@@ -28,6 +28,7 @@ export default [
       },
     },
     rules: {
+      'max-len': ['warn', { code: 96, ignoreStrings: true, ignorePattern: 'd="[^"]*"' }],
       'vue/multi-word-component-names': 'warn',
       '@typescript-eslint/no-unused-vars': [
         'error',
